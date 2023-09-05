@@ -64,4 +64,5 @@ public class GitHubRepositoryIntegrationTest {
         List<UserRepositoryDto> repos = githubRepository.getRepositoryFromUser("somename");
         assertThat(repos).hasSize(1);
     }
+
 }
