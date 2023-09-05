@@ -1,6 +1,5 @@
 package com.github.api.repository;
 
-import com.github.api.config.Config;
 import com.github.api.config.TestConfig;
 import com.github.api.model.dto.UserRepositoryDto;
 import okhttp3.mockwebserver.MockResponse;
@@ -12,10 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.web.reactive.function.client.WebClientCustomizer;
-import org.springframework.context.annotation.Import;
-import org.springframework.stereotype.Repository;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -26,10 +21,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest()
+@SpringBootTest(classes = TestConfig.class)
 @RunWith(SpringRunner.class)
-@Import(TestConfig.class)
-public class GitHubRepositoryTest {
+public class GitHubRepositoryIntegrationTest {
 
     private static final String RESPONSE_BODY = "[" +
             "{" +
