@@ -1,7 +1,7 @@
 package com.github.api.service;
 
 import com.github.api.model.dto.UserRepositoryDto;
-import com.github.api.model.response.UserRespositoryResponse;
+import com.github.api.model.response.UserRepositoryResponse;
 import com.github.api.repository.GithubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class GitHubService {
         this.githubRepository = githubRepository;
     }
 
-    public List<UserRespositoryResponse> getRepositoriesFromUser(String username) {
+    public List<UserRepositoryResponse> getRepositoriesFromUser(String username) {
         List<UserRepositoryDto> listOfRepositories = githubRepository.getRepositoryFromUser(username);
         if(listOfRepositories.isEmpty()) return Collections.emptyList();
 
@@ -27,7 +27,7 @@ public class GitHubService {
             String repositoryName = repo.name();
             String ownerLogin = repo.owner().login();
 
-            return new UserRespositoryResponse(repositoryName, ownerLogin);
+            return new UserRepositoryResponse(repositoryName, ownerLogin);
         }).toList();
     }
 }

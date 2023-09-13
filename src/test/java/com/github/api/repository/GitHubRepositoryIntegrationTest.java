@@ -10,7 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -20,25 +22,40 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = TestConfig.class)
 @RunWith(SpringRunner.class)
 public class GitHubRepositoryIntegrationTest {
 
-    private static final String RESPONSE_BODY = "[" +
-            "{" +
-            "'id': 1349611," +
-            "'node_id': 'MDEwOlJlcG9zaXRvcnkxMzQ5NjEx'," +
-            "'name': 'CustomField'," +
-            "'full_name': 'somename/CustomField'," +
-            "'owner': {" +
-            "'login': 'somename'," +
-            "'url': 'https://api.github.com/users/somename'" +
-            "}," +
-            "'html_url': 'https://github.com/somename/CustomField'" +
-            // Add any other necessary fields from UserRepositoryDto here...
-            "}" +
-            "]";
+    private static final String GET_BODY_RESPONSE = """
+        [
+            {
+                "id": 1,
+                "node_id": "node1",
+                "name": "Repo1",
+                "full_name": "User1/Repo1",
+                "owner": {
+                    "login": "User1",
+                    "url": "https://github.com/User1"
+                },
+                "private": false,
+                "html_url": "https://github.com/User1/Repo1"
+            },
+            {
+                "id": 2,
+                "node_id": "node2",
+                "name": "Repo2",
+                "full_name": "User1/Repo2",
+                "owner": {
+                    "login": "User1",
+                    "url": "https://github.com/User1"
+                },
+                "private": true,
+                "html_url": "https://github.com/User1/Repo2"
+            }
+        ]
+    """;
 
     @Autowired
     private GithubRepository githubRepository;
@@ -46,12 +63,9 @@ public class GitHubRepositoryIntegrationTest {
     @Autowired
     private MockWebServer mockWebServer;
 
-    @Autowired
-    private WebClient webClient;
-
     @BeforeEach
     public void setup() {
-        mockWebServer.enqueue(new MockResponse().setBody(RESPONSE_BODY).setResponseCode(200));
+        mockWebServer.enqueue(new MockResponse().setHeader("Content-Type", "application/json").setBody(GET_BODY_RESPONSE).setResponseCode(200));
     }
 
     @AfterEach

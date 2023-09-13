@@ -1,6 +1,6 @@
 package com.github.api.controller;
 
-import com.github.api.model.response.UserRespositoryResponse;
+import com.github.api.model.response.UserRepositoryResponse;
 import com.github.api.service.GitHubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +22,7 @@ public class GitHubController {
     }
 
     @GetMapping("/user/{username}/repos")
-    public List<UserRespositoryResponse> getUserRepositories(
+    public List<UserRepositoryResponse> getUserRepositories(
             @PathVariable String username
     ) {
         return gitHubService.getRepositoriesFromUser(username);

@@ -1,7 +1,6 @@
 package com.github.api.repository;
 
 import com.github.api.model.dto.UserRepositoryDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -14,10 +13,10 @@ public class GithubRepository {
 
     private final WebClient webClient;
 
-    @Autowired
-    public GithubRepository(WebClient.Builder webclientBuilder) {
-        this.webClient = webclientBuilder.baseUrl("https://api.github.com/").build();
+    public GithubRepository(WebClient webClient) {
+        this.webClient = webClient;
     }
+
 
     public List<UserRepositoryDto> getRepositoryFromUser(String username) {
         return webClient.get()
