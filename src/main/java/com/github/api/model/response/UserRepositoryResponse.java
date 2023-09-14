@@ -1,6 +1,6 @@
 package com.github.api.model.response;
 
-public record UserRespositoryResponse(
+public record UserRepositoryResponse(
         String repositoryName,
         String ownerLogin
 ) {
