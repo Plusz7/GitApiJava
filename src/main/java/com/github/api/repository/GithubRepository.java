@@ -19,19 +19,22 @@ public class GithubRepository {
 
 
     public List<UserRepositoryDto> getRepositoryFromUser(String username) {
+        System.out.println(webClient);
         return webClient.get()
                 .uri("/users/{username}/repos", username)
                 .retrieve()
                 .bodyToFlux(UserRepositoryDto.class)
                 .onErrorResume(error -> {
-            System.out.println("Error in WebClient call: " + error.getMessage());
-            return Mono.empty(); // Return an empty Mono on error
-        })
+                    System.out.println("Error in WebClient call: " + error.getMessage());
+                    return Mono.empty(); // Return an empty Mono on error
+                })
                 .collectList()
                 .doOnSuccess(repositories -> {
                     System.out.println("Received " + repositories.size() + " repositories");
                 })
-                .blockOptional().orElseGet(Collections::emptyList);
+                .blockOptional().orElseGet(() -> {
+                    System.out.println("WebClient call did not complete successfully.");
+                    return Collections.emptyList();
+                });
     }
-
 }

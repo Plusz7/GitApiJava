@@ -16,6 +16,8 @@ public class Config {
     @Bean
     @Profile("dev")
     public WebClient webClient(WebClient.Builder webclientBuilder) {
-        return webclientBuilder.baseUrl("https://api.github.com/").build();
+        return webclientBuilder
+                .baseUrl("https://api.github.com/")
+                .build();
     }
 }

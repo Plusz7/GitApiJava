@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -63,9 +62,17 @@ public class GitHubRepositoryIntegrationTest {
     @Autowired
     private MockWebServer mockWebServer;
 
+    @Autowired
+    private WebClient webClient;
+
     @BeforeEach
     public void setup() {
-        mockWebServer.enqueue(new MockResponse().setHeader("Content-Type", "application/json").setBody(GET_BODY_RESPONSE).setResponseCode(200));
+        mockWebServer.enqueue(
+                new MockResponse()
+                        .setResponseCode(200)
+                        .setHeader("Content-Type", "application/json")
+                        .setBody(GET_BODY_RESPONSE)
+        );
     }
 
     @AfterEach
@@ -75,8 +82,15 @@ public class GitHubRepositoryIntegrationTest {
 
     @Test
     public void fetchUserRepos_ShouldReturnCorrectRepos() {
-        List<UserRepositoryDto> repos = githubRepository.getRepositoryFromUser("somename");
-        assertThat(repos).hasSize(1);
+        mockWebServer.enqueue(
+                new MockResponse()
+                        .setResponseCode(200)
+                        .setHeader("Content-Type", "application/json")
+                        .setBody(GET_BODY_RESPONSE)
+        );
+        List<UserRepositoryDto> repos = githubRepository.getRepositoryFromUser("User1");
+        assertThat(repos).isNotNull();
+        assertThat(repos).hasSize(2);
     }
 
 }
