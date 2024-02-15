@@ -8,7 +8,8 @@ public record UserRepositoryDto(
         OwnerDto owner,
         Boolean isPrivate,
         String html_url,
-        String description
+        String description,
+        Boolean fork
 ) {
 
 }
